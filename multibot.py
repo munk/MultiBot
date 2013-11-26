@@ -1,5 +1,6 @@
 from multiprocessing import Pool
 from subprocess import call
+from itertools import imap
 import robot
 import os
 
@@ -25,15 +26,19 @@ def run_suite(suite, variable_files=None, report_dir="reports", log_name="report
 def run(suites, n_proc):
     """Actually run the tests!"""
     pool = Pool(processes=n_proc)
-    results = pool.map(run_suite, suites)
-    return results
+    apply_async = lambda suite: pool.apply_async(run_suite, [suite])
+    results = imap(apply_async, suites)
+    for r in results:
+        yield r.get(timeout=600)
 
 def rebot(results):
     return call("rebot %s/*.xml" % results)
 
 def main():
     cores = 4
-    suite = discover_suites()
-    #TODO: How do we get the names of the report files?
-    results = run(suites, cores)
+    suites = discover_suites()
+    results = [r for r in run(suites, cores)]
     rebot(results)
+
+if __name__ == '__main__':
+    main()
