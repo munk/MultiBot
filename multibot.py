@@ -19,8 +19,13 @@ def run_suite(suite, variable_files=None, report_dir="reports", log_name="report
         var_files = "-V " + "-V".join(variable_files)
     else:
         var_files = ""
-    command = "pybot -e DEMO -l %s -d %s %s %s" % (report_dir, log_name, var_files, suite)
-    proc = call(command)
+    command = "pybot" 
+    reportd = "-d %s" % report_dir 
+    log = "-l %s" % log_name
+    vars_ = var_files
+    print suite
+    print vars_
+    proc = call([command, log, reportd, vars_, suite])
     return proc
 
 def run(suites, n_proc):
