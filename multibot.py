@@ -14,8 +14,10 @@ def discover_suites(suite_home=None):
     directories = [suite.directory for suite in test_suites.children]
     return directories
 
-def run_suite(suite, variable_files=None, report_dir="reports", log_name="reports"):
+def run_suite(args):
     """Does the actual work to run a test suite."""
+    suite, variable_files, report_dir, log_name = args
+
     if variable_files is not None:
         var_files = "-V " + "-V".join(variable_files)
     else:
