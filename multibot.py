@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from multiprocessing import Pool
 from subprocess import call
 from itertools import imap
@@ -23,8 +24,6 @@ def run_suite(suite, variable_files=None, report_dir="reports", log_name="report
     reportd = "-d %s" % report_dir 
     log = "-l %s" % log_name
     vars_ = var_files
-    print suite
-    print vars_
     proc = call([command, log, reportd, vars_, suite])
     return proc
 
